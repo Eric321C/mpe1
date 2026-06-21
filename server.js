@@ -685,7 +685,7 @@ app.get('*', (req, res) => {
 });
 
 // 8. Jalankan Server
-if (process.env.NODE_ENV !== 'production' && require.main === module) {
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server Laporan Aktivitas Harian berjalan di http://localhost:${PORT}`);
   });
