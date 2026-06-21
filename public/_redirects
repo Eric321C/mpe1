@@ -1,0 +1,5 @@
+# CLOUDFLARE PAGES PROXY RULE
+# Replace the URL below with your actual hosted backend API URL (e.g. on Render or Railway).
+# Once replaced, any calls from the browser to /api/* will be automatically proxied to your backend.
+
+/api/* https://your-backend-api-url.onrender.com/api/:splat 200
