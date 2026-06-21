@@ -4,7 +4,7 @@
 
 // CONFIGURATION: Set this to your backend API URL if hosting frontend on Cloudflare Pages and backend elsewhere.
 // Example: const API_BASE_URL = 'https://laporan-api.onrender.com';
-const API_BASE_URL = 'https://mpe1-o8ga.vercel.app';
+const API_BASE_URL = 'mpe1-production.up.railway.app';
 
 if (API_BASE_URL) {
   const originalFetch = window.fetch;
