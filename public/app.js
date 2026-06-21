@@ -478,7 +478,7 @@ async function handleLoginSubmit(e) {
   showLoading(true);
 
   try {
-    const response = await fetch('https://mpe1-jz32.vercel.app/api/auth/login', {
+    const response = await fetch('https://mpe1-o8ga.vercel.app/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
