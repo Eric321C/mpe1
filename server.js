@@ -6,7 +6,7 @@ const mysql = require('mysql2/promise');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'laporan-aktivitas-super-secret-key-2026';
 
 // 1. Inisialisasi Database MySQL
