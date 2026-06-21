@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const mysql = require('mysql2/promise');
 const path = require('path');
 
-
+const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'laporan-aktivitas-super-secret-key-2026';
 
@@ -161,6 +161,22 @@ async function initializeDb() {
 initializeDb();
 
 // 3. Setup Express Middleware
+// Custom CORS Middleware to handle credentials and dynamic origin
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -277,8 +293,8 @@ app.post('/api/auth/login', async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
-      sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production'
+      sameSite: 'none',
+      secure: true
     });
 
     return res.json({
@@ -293,7 +309,11 @@ app.post('/api/auth/login', async (req, res) => {
 
 // C. Logout
 app.post('/api/auth/logout', (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
+  });
   return res.json({ message: 'Berhasil logout.' });
 });
 
@@ -670,22 +690,5 @@ if (process.env.NODE_ENV !== 'production' && require.main === module) {
     console.log(`Server Laporan Aktivitas Harian berjalan di http://localhost:${PORT}`);
   });
 }
-const express = require('express');
-const cors = require('cors'); // 1. Import library CORS
-const app = express();
 
-// 2. Pasang middleware CORS di sini (di atas route)
-app.use(cors({
-  // Masukkan URL frontend Cloudflare Anda di bawah ini
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true // Izinkan jika Anda menggunakan cookie/session untuk login
-}));
-
-// Contoh Route Backend Anda
-app.post('/api/login', (req, res) => {
-  // Proses login...
-});
-
-module.exports = app;
 module.exports = app;

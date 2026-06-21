@@ -4,11 +4,14 @@
 
 // CONFIGURATION: Set this to your backend API URL if hosting frontend on Cloudflare Pages and backend elsewhere.
 // Example: const API_BASE_URL = 'https://laporan-api.onrender.com';
-const API_BASE_URL = '';
+const API_BASE_URL = 'https://mpe1-o8ga.vercel.app';
 
 if (API_BASE_URL) {
   const originalFetch = window.fetch;
   window.fetch = function (input, init) {
+    init = init || {};
+    init.credentials = 'include'; // Ensure cookies/session tokens are sent cross-origin
+
     if (typeof input === 'string' && input.startsWith('/api/')) {
       input = API_BASE_URL + input;
     } else if (input instanceof Request && input.url.startsWith('/api/')) {
@@ -478,7 +481,7 @@ async function handleLoginSubmit(e) {
   showLoading(true);
 
   try {
-    const response = await fetch('https://mpe1-o8ga.vercel.app/api/auth/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
